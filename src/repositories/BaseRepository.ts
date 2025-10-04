@@ -5,6 +5,14 @@ export class BaseRepository<T extends { id: string }> {
     return Array.from(this.items.values());
   }
 
+  countAll(filter?: { key: keyof T; value: T[keyof T] }): number {
+    if (filter) {
+      return this.findAll().filter((item) => item[filter.key] === filter.value)
+        .length;
+    }
+    return this.items.size;
+  }
+
   findById(id: string): T | undefined {
     return this.items.get(id);
   }

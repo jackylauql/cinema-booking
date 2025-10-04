@@ -7,6 +7,10 @@ describe("Base Repository", () => {
     expect(baseRepo.findById("1")?.title).toStrictEqual("Inception");
     baseRepo.save({ id: "2", title: "Avengers" });
     expect(baseRepo.findAll().length).toStrictEqual(2);
+    expect(baseRepo.countAll()).toStrictEqual(2);
+    expect(
+      baseRepo.countAll({ key: "title", value: "Avengers" })
+    ).toStrictEqual(1);
     baseRepo.delete("1");
     expect(baseRepo.findById("1")).toStrictEqual(undefined);
   });
