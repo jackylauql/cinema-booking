@@ -1,8 +1,21 @@
 export class BaseRepository<T extends { id: string }> {
   protected items: Map<string, T> = new Map();
 
-  findAll(): T[] {
-    return Array.from(this.items.values());
+  findAll(
+    filter?: { key: keyof T; value: T[keyof T]; operator?: "=" | "!=" }[]
+  ): T[] {
+    const values = Array.from(this.items.values());
+    if (filter) {
+      return values.filter((item) => {
+        for (const f of filter) {
+          if ((!f.operator || f.operator === "=") && item[f.key] !== f.value)
+            return false;
+          if (f.operator === "!=" && item[f.key] === f.value) return false;
+        }
+        return true;
+      });
+    }
+    return values;
   }
 
   countAll(filter?: { key: keyof T; value: T[keyof T] }): number {
