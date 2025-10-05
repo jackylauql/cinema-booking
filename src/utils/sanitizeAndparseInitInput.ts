@@ -19,3 +19,9 @@ export const getRowIndexBasedOnChar = (char: string) => {
 export const getUpperCaseChar = (index: number) => {
   return String.fromCharCode(index + 65);
 };
+
+export const centerText = (text: string, width: number) => {
+  const padding = Math.floor((width - text.length) / 2);
+  const spaces = " ".repeat(Math.max(0, padding));
+  return spaces + text;
+};

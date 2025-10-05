@@ -4,6 +4,7 @@ import { CinemaRepository } from "../repositories/CinemaRepository";
 import { Booking, SeatPosition } from "../models/Booking";
 import { ask } from "../cli";
 import {
+  centerText,
   getRowIndexBasedOnChar,
   getUpperCaseChar,
 } from "../utils/sanitizeAndparseInitInput";
@@ -34,6 +35,11 @@ export class CinemaService {
       }
 
       const booking = this.reserveTickets(cinema, numOfTickets);
+      console.log(
+        `\nSuccessfully reserved ${numOfTickets} ${cinema.title} tickets.`
+      );
+      console.log(`Booking id: ${booking.id}`);
+      console.log("Selected seats:\n");
       console.log(this.renderCinema(cinema, booking.seats));
       const confirmInput = await ask(
         "\nEnter blank to accept seat selection, or enter new seating position: "
@@ -213,6 +219,10 @@ export class CinemaService {
     if (!cinema) return "Cinema not found";
 
     const lines: string[] = [];
+    const titleLine = centerText("SCREEN", cinema.seatsPerRow * 3);
+    lines.push(titleLine);
+    const separatorLine = "-".repeat(cinema.seatsPerRow * 3);
+    lines.push(separatorLine);
 
     const bookedSeats = this.bookingRepo.findAll([
       {
